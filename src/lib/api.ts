@@ -40,7 +40,7 @@ export async function fetchCommunityMindshare(params: MindshareParams, retryCoun
       const errorData = await response.json().catch(() => ({}));
       
       // If it's a 504 timeout and we haven't retried too many times, retry
-      if (response.status === 504 && retryCount < 2) {
+      if (response.status === 504 && retryCount < 4) {
         console.log(`504 timeout, retrying... (attempt ${retryCount + 1})`);
         await new Promise(resolve => setTimeout(resolve, 2000)); // Wait 2 seconds before retry
         return fetchCommunityMindshare(params, retryCount + 1);
@@ -61,7 +61,7 @@ export async function fetchCommunityMindshare(params: MindshareParams, retryCoun
     console.error('Error fetching community mindshare:', error);
     
     // If it's a 504 timeout error and we haven't retried too many times, retry
-    if (error instanceof Error && error.message.includes('504') && retryCount < 2) {
+    if (error instanceof Error && error.message.includes('504') && retryCount < 4) {
       console.log(`504 timeout error, retrying... (attempt ${retryCount + 1})`);
       await new Promise(resolve => setTimeout(resolve, 2000)); // Wait 2 seconds before retry
       return fetchCommunityMindshare(params, retryCount + 1);
@@ -81,4 +81,11 @@ export const timeWindows = [
   { value: '6d', label: '6 Days' },
   { value: '7d', label: '7 Days' },
   { value: '8d', label: '8 Days' },
+  { value: '9d', label: '9 Days' },
+  { value: '10d', label: '10 Days' },
+  { value: '11d', label: '11 Days' },
+  { value: '12d', label: '12 Days' },
+  { value: '13d', label: '13 Days' },
+  { value: '14d', label: '14 Days' },
+  { value: '15d', label: '15 Days' },
 ];
