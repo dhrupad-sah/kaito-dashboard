@@ -142,7 +142,7 @@ export default async function handler(
     } catch (fetchError) {
       clearTimeout(timeoutId);
       
-      if (fetchError.name === 'AbortError') {
+      if (fetchError instanceof Error && fetchError.name === 'AbortError') {
         console.error('API request timed out for ticker:', ticker);
         return res.status(408).json({
           error: 'Request timed out',

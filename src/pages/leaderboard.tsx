@@ -351,7 +351,7 @@ export default function LeaderboardPage() {
                 <div className="mt-6">
                   <h4 className="font-semibold text-gray-900 mb-3">Peripheral Tweet URLs ({selectedUser.peripheral_tweet_urls.length})</h4>
                   <div className="max-h-32 overflow-y-auto space-y-1">
-                    {selectedUser.peripheral_tweet_urls.map((url, index) => (
+                    {selectedUser.peripheral_tweet_urls.map((url: string, index: number) => (
                       <a
                         key={index}
                         href={url}

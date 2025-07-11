@@ -61,7 +61,7 @@ export async function fetchCommunityMindshare(params: MindshareParams, retryCoun
     console.error('Error fetching community mindshare:', error);
     
     // If it's a 504 timeout error and we haven't retried too many times, retry
-    if (error.message.includes('504') && retryCount < 2) {
+    if (error instanceof Error && error.message.includes('504') && retryCount < 2) {
       console.log(`504 timeout error, retrying... (attempt ${retryCount + 1})`);
       await new Promise(resolve => setTimeout(resolve, 2000)); // Wait 2 seconds before retry
       return fetchCommunityMindshare(params, retryCount + 1);
