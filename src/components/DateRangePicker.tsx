@@ -27,6 +27,7 @@ export default function DateRangePicker({
     { value: '3d', label: '3 Days', days: 3 },
     { value: '7d', label: '7 Days', days: 7 },
     { value: '14d', label: '14 Days', days: 14 },
+    { value: '30d', label: '30 Days', days: 30 },
   ];
 
   const handlePresetClick = (preset: string) => {
@@ -36,7 +37,7 @@ export default function DateRangePicker({
   };
 
   const handleCustomDaysChange = (days: number) => {
-    if (days >= 1 && days <= 15) {
+    if (days >= 1 && days <= 30) {
       setCustomDays(days);
       setSelectionMode('days');
       setIsCustomRange(false);
@@ -132,7 +133,7 @@ export default function DateRangePicker({
 
             {/* Custom Days Selector */}
             <div>
-              <p className="text-xs text-gray-500 mb-2">Custom Days (1-15)</p>
+              <p className="text-xs text-gray-500 mb-2">Custom Days (1-30)</p>
               <div className="flex items-center space-x-3">
                 <button
                   onClick={() => handleCustomDaysChange(customDays - 1)}
@@ -145,7 +146,7 @@ export default function DateRangePicker({
                   <input
                     type="number"
                     min="1"
-                    max="15"
+                    max="30"
                     value={customDays}
                     onChange={(e) => handleCustomDaysChange(parseInt(e.target.value) || 1)}
                     className={`w-16 px-2 py-1 text-center border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 ${
@@ -156,7 +157,7 @@ export default function DateRangePicker({
                 </div>
                 <button
                   onClick={() => handleCustomDaysChange(customDays + 1)}
-                  disabled={customDays >= 15}
+                  disabled={customDays >= 30}
                   className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 disabled:bg-gray-50 disabled:text-gray-300 flex items-center justify-center text-sm font-medium"
                 >
                   +

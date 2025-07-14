@@ -88,4 +88,5 @@ export const timeWindows = [
   { value: '13d', label: '13 Days' },
   { value: '14d', label: '14 Days' },
   { value: '15d', label: '15 Days' },
+  { value: '30d', label: '30 Days' },
 ];
