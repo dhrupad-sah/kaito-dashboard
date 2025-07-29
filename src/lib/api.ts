@@ -72,21 +72,8 @@ export async function fetchCommunityMindshare(params: MindshareParams, retryCoun
   }
 }
 
-export const timeWindows = [
-  { value: '1d', label: '1 Day' },
-  { value: '2d', label: '2 Days' },
-  { value: '3d', label: '3 Days' },
-  { value: '4d', label: '4 Days' },
-  { value: '5d', label: '5 Days' },
-  { value: '6d', label: '6 Days' },
-  { value: '7d', label: '7 Days' },
-  { value: '8d', label: '8 Days' },
-  { value: '9d', label: '9 Days' },
-  { value: '10d', label: '10 Days' },
-  { value: '11d', label: '11 Days' },
-  { value: '12d', label: '12 Days' },
-  { value: '13d', label: '13 Days' },
-  { value: '14d', label: '14 Days' },
-  { value: '15d', label: '15 Days' },
-  { value: '30d', label: '30 Days' },
-];
+// Generate all possible day windows from 1 to 90 days for API support
+export const timeWindows = Array.from({ length: 90 }, (_, i) => ({
+  value: `${i + 1}d`,
+  label: `${i + 1} Day${i === 0 ? '' : 's'}`,
+}));

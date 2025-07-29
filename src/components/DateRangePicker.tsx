@@ -21,13 +21,24 @@ export default function DateRangePicker({
   const [customDays, setCustomDays] = useState(7);
   const [selectionMode, setSelectionMode] = useState<'preset' | 'days' | 'daterange'>('preset');
 
-  // Preset options
-  const presetOptions = [
+  // Preset options organized by time period
+  const dayPresets = [
     { value: '1d', label: '1 Day', days: 1 },
     { value: '3d', label: '3 Days', days: 3 },
-    { value: '7d', label: '7 Days', days: 7 },
-    { value: '14d', label: '14 Days', days: 14 },
-    { value: '30d', label: '30 Days', days: 30 },
+    { value: '7d', label: '1 Week', days: 7 },
+    { value: '14d', label: '2 Weeks', days: 14 },
+  ];
+
+  const monthPresets = [
+    { value: '30d', label: '1 Month', days: 30 },
+    { value: '60d', label: '2 Months', days: 60 },
+    { value: '90d', label: '3 Months', days: 90 },
+  ];
+
+  const popularRanges = [
+    { value: '7d', label: '📊 Last Week', days: 7, color: 'bg-blue-500' },
+    { value: '30d', label: '📈 Last Month', days: 30, color: 'bg-green-500' },
+    { value: '90d', label: '🚀 Quarter', days: 90, color: 'bg-purple-500' },
   ];
 
   const handlePresetClick = (preset: string) => {
@@ -37,7 +48,7 @@ export default function DateRangePicker({
   };
 
   const handleCustomDaysChange = (days: number) => {
-    if (days >= 1 && days <= 30) {
+    if (days >= 1 && days <= 90) {
       setCustomDays(days);
       setSelectionMode('days');
       setIsCustomRange(false);
@@ -106,78 +117,124 @@ export default function DateRangePicker({
 
         {/* Time Window Selector */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-3">
-            Time Window
+          <label className="block text-sm font-medium text-gray-700 mb-4">
+            📊 Time Window Selection
           </label>
           
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Quick Presets */}
-            <div>
-              <p className="text-xs text-gray-500 mb-2">Quick Select</p>
-              <div className="flex flex-wrap gap-2">
-                {presetOptions.map((preset) => (
+          <div className="space-y-6">
+            {/* Popular Ranges - Hero Section */}
+            <div className="bg-gradient-to-r from-gray-50 to-gray-100 p-4 rounded-lg">
+              <p className="text-sm font-medium text-gray-700 mb-3">🔥 Popular Ranges</p>
+              <div className="flex flex-wrap gap-3">
+                {popularRanges.map((range) => (
                   <button
-                    key={preset.value}
-                    onClick={() => handlePresetClick(preset.value)}
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                      selectionMode === 'preset' && currentWindow === preset.value
-                        ? 'bg-primary-600 text-white shadow-md'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    key={range.value}
+                    onClick={() => handlePresetClick(range.value)}
+                    className={`px-6 py-3 rounded-lg text-sm font-semibold transition-all transform hover:scale-105 ${
+                      selectionMode === 'preset' && currentWindow === range.value
+                        ? `${range.color} text-white shadow-lg`
+                        : 'bg-white text-gray-700 hover:bg-gray-50 shadow-md border'
                     }`}
                   >
-                    {preset.label}
+                    {range.label}
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* Custom Days Selector */}
-            <div>
-              <p className="text-xs text-gray-500 mb-2">Custom Days (1-30)</p>
-              <div className="flex items-center space-x-3">
-                <button
-                  onClick={() => handleCustomDaysChange(customDays - 1)}
-                  disabled={customDays <= 1}
-                  className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 disabled:bg-gray-50 disabled:text-gray-300 flex items-center justify-center text-sm font-medium"
-                >
-                  −
-                </button>
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="number"
-                    min="1"
-                    max="30"
-                    value={customDays}
-                    onChange={(e) => handleCustomDaysChange(parseInt(e.target.value) || 1)}
-                    className={`w-16 px-2 py-1 text-center border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 ${
-                      selectionMode === 'days' ? 'border-primary-500 bg-primary-50' : 'border-gray-300'
-                    }`}
-                  />
-                  <span className="text-sm text-gray-600">days</span>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Days & Weeks */}
+              <div className="space-y-4">
+                <div>
+                  <p className="text-sm font-medium text-gray-700 mb-2">📅 Days & Weeks</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    {dayPresets.map((preset) => (
+                      <button
+                        key={preset.value}
+                        onClick={() => handlePresetClick(preset.value)}
+                        className={`px-3 py-2 rounded-md text-sm font-medium transition-all ${
+                          selectionMode === 'preset' && currentWindow === preset.value
+                            ? 'bg-blue-600 text-white shadow-md'
+                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        }`}
+                      >
+                        {preset.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-                <button
-                  onClick={() => handleCustomDaysChange(customDays + 1)}
-                  disabled={customDays >= 30}
-                  className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 disabled:bg-gray-50 disabled:text-gray-300 flex items-center justify-center text-sm font-medium"
-                >
-                  +
-                </button>
-              </div>
-            </div>
 
-            {/* Date Range Option */}
-            <div>
-              <p className="text-xs text-gray-500 mb-2">Specific Date Range</p>
-              <button
-                onClick={handleDateRangeMode}
-                className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
-                  selectionMode === 'daterange'
-                    ? 'bg-primary-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                📅 Select Custom Dates
-              </button>
+                {/* Custom Days */}
+                <div>
+                  <p className="text-sm font-medium text-gray-700 mb-2">🎯 Custom Days (1-90)</p>
+                  <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-md">
+                    <button
+                      onClick={() => handleCustomDaysChange(customDays - 1)}
+                      disabled={customDays <= 1}
+                      className="w-8 h-8 rounded-full bg-white hover:bg-gray-100 disabled:bg-gray-200 disabled:text-gray-400 flex items-center justify-center text-sm font-bold shadow-sm"
+                    >
+                      −
+                    </button>
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="number"
+                        min="1"
+                        max="90"
+                        value={customDays}
+                        onChange={(e) => handleCustomDaysChange(parseInt(e.target.value) || 1)}
+                        className={`w-20 px-3 py-2 text-center border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 font-semibold ${
+                          selectionMode === 'days' ? 'border-primary-500 bg-primary-50 text-primary-700' : 'border-gray-300'
+                        }`}
+                      />
+                      <span className="text-sm text-gray-600 font-medium">days</span>
+                    </div>
+                    <button
+                      onClick={() => handleCustomDaysChange(customDays + 1)}
+                      disabled={customDays >= 90}
+                      className="w-8 h-8 rounded-full bg-white hover:bg-gray-100 disabled:bg-gray-200 disabled:text-gray-400 flex items-center justify-center text-sm font-bold shadow-sm"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Months & Date Range */}
+              <div className="space-y-4">
+                <div>
+                  <p className="text-sm font-medium text-gray-700 mb-2">📆 Monthly Ranges</p>
+                  <div className="space-y-2">
+                    {monthPresets.map((preset) => (
+                      <button
+                        key={preset.value}
+                        onClick={() => handlePresetClick(preset.value)}
+                        className={`w-full px-4 py-3 rounded-md text-sm font-medium transition-all ${
+                          selectionMode === 'preset' && currentWindow === preset.value
+                            ? 'bg-green-600 text-white shadow-md'
+                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        }`}
+                      >
+                        {preset.label} <span className="text-xs opacity-70">({preset.days} days)</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Custom Date Range */}
+                <div>
+                  <p className="text-sm font-medium text-gray-700 mb-2">🗓️ Specific Dates</p>
+                  <button
+                    onClick={handleDateRangeMode}
+                    className={`w-full px-4 py-3 rounded-md text-sm font-medium transition-all ${
+                      selectionMode === 'daterange'
+                        ? 'bg-purple-600 text-white shadow-md'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    📅 Select Custom Date Range
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
