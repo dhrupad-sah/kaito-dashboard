@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import MetricsOverview from '@/components/MetricsOverview';
 import DateRangePicker from '@/components/DateRangePicker';
-import ApiDataDisplay from '@/components/ApiDataDisplay';
 import { fetchCommunityMindshare, MindshareParams } from '@/lib/api';
 import { LeaderboardData } from '@/types';
 
@@ -12,7 +11,6 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [ticker, setTicker] = useState('MIRA');
   const [window, setWindow] = useState('7d');
-  const [showRawData, setShowRawData] = useState(false);
   const [apiStatus, setApiStatus] = useState<string | null>(null);
 
   const fetchData = async (params: MindshareParams) => {
@@ -70,30 +68,16 @@ export default function Home() {
           currentWindow={window}
         />
 
-        {/* Controls and Status */}
-        <div className="flex justify-between items-center mb-4">
-          {/* API Status */}
-          {apiStatus && (
-            <div className={`px-3 py-1 rounded-full text-sm font-medium ${
-              apiStatus.includes('mock') || apiStatus.includes('unavailable') 
-                ? 'bg-yellow-100 text-yellow-800' 
-                : 'bg-green-100 text-green-800'
-            }`}>
-              {apiStatus}
-            </div>
-          )}
-          
-          {/* Toggle for Raw Data */}
-          <button
-            onClick={() => setShowRawData(!showRawData)}
-            className="flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
-          >
-            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
-            {showRawData ? 'Hide Raw API Data' : 'Show Raw API Data'}
-          </button>
-        </div>
+        {/* API Status */}
+        {apiStatus && (
+          <div className={`px-3 py-1 rounded-full text-sm font-medium mb-4 ${
+            apiStatus.includes('mock') || apiStatus.includes('unavailable') 
+              ? 'bg-yellow-100 text-yellow-800' 
+              : 'bg-green-100 text-green-800'
+          }`}>
+            {apiStatus}
+          </div>
+        )}
 
         {/* Error State */}
         {error && (
@@ -137,15 +121,7 @@ export default function Home() {
 
         {/* Data Display */}
         {data && (
-          <>
-            {/* Overview Metrics */}
-            <MetricsOverview data={data.overall_metrics} isLoading={loading} />
-
-            {/* Raw API Data Display */}
-            {showRawData && (
-              <ApiDataDisplay data={data} isLoading={loading} />
-            )}
-          </>
+          <MetricsOverview data={data.overall_metrics} isLoading={loading} />
         )}
 
         {/* Empty State */}
