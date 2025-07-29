@@ -10,7 +10,7 @@ export default function Home() {
   const [data, setData] = useState<LeaderboardData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [ticker, setTicker] = useState('KAITO');
+  const [ticker, setTicker] = useState('MIRA');
   const [window, setWindow] = useState('7d');
   const [showRawData, setShowRawData] = useState(false);
   const [apiStatus, setApiStatus] = useState<string | null>(null);
@@ -113,7 +113,7 @@ export default function Home() {
                 {(error.includes('timed out') || error.includes('No data found')) && (
                   <div className="mt-2">
                     <p className="text-sm text-red-600">
-                      💡 <strong>Suggestion:</strong> Try using "KAITO" as the ticker, as it's known to work.
+                      💡 <strong>Suggestion:</strong> Try using "MIRA" as the ticker, as it's known to work.
                     </p>
                   </div>
                 )}

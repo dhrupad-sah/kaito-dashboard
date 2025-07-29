@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 const API_BASE_URL = 'https://api.kaito.ai/api/v1';
+const API_KEY = process.env.KAITO_API_KEY;
 
 export default async function handler(
   req: NextApiRequest,
@@ -8,6 +9,10 @@ export default async function handler(
 ) {
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  if (!API_KEY) {
+    return res.status(500).json({ error: 'KAITO_API_KEY environment variable is not set' });
   }
 
   const { ticker, window, start_date, end_date } = req.query;
@@ -29,6 +34,7 @@ export default async function handler(
   try {
     const searchParams = new URLSearchParams();
     searchParams.append('ticker', ticker as string);
+    searchParams.append('api_key', API_KEY);
     
     if (window) {
       searchParams.append('window', window as string);
@@ -52,6 +58,7 @@ export default async function handler(
           'Accept': 'application/json',
           'Accept-Encoding': 'gzip, deflate',
           'User-Agent': 'Kaito-Dashboard/1.0',
+          'X-API-Key': API_KEY,
         },
         signal: controller.signal,
       });
@@ -86,7 +93,7 @@ export default async function handler(
       if (!data.community_mindshare || !data.community_mindshare.top_100_yappers) {
         return res.status(404).json({
           error: 'No data found for this ticker',
-          message: `The ticker "${ticker}" may not be available in the community leaderboard. Try using "KAITO" or other supported tokens.`,
+          message: `The ticker "${ticker}" may not be available in the community leaderboard. Try using "MIRA" or other supported tokens.`,
           ticker: ticker
         });
       }
@@ -148,7 +155,7 @@ export default async function handler(
           error: 'Request timed out',
           message: `The request for ticker "${ticker}" timed out. This ticker may not be supported or the API is experiencing issues.`,
           ticker: ticker,
-          suggestion: 'Try using "KAITO" or check if the ticker is available in the community leaderboard.'
+          suggestion: 'Try using "MIRA" or check if the ticker is available in the community leaderboard.'
         });
       }
       

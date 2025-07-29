@@ -8,7 +8,7 @@ export default function LeaderboardPage() {
   const [data, setData] = useState<LeaderboardData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [ticker, setTicker] = useState('KAITO');
+  const [ticker, setTicker] = useState('MIRA');
   const [window, setWindow] = useState('7d');
   const [apiStatus, setApiStatus] = useState<string | null>(null);
   const [selectedUser, setSelectedUser] = useState<AccountMetrics | null>(null);

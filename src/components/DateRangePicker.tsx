@@ -88,7 +88,7 @@ export default function DateRangePicker({
               type="text"
               value={currentTicker}
               onChange={(e) => onTickerChange(e.target.value.toUpperCase())}
-              placeholder="Enter ticker (e.g., KAITO)"
+              placeholder="Enter ticker (e.g., MIRA)"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             />
           </div>
